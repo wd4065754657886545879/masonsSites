@@ -23,11 +23,11 @@ window.onload = function() {
     var cursors;
 
     function preload() {
-        // Load images for both games (replace with your image paths)
-        this.load.image('monkey', 'assets/images/monkey.png');
-        this.load.image('item', 'assets/images/item.png');
-        this.load.image('background', 'assets/images/background.png');
-        this.load.image('block', 'assets/images/block.png');
+        // Load images using the PNG file URLs
+        this.load.image('monkey', 'assets/monkey.png');
+        this.load.image('item', 'assets/item.png');
+        this.load.image('background', 'assets/background.png');
+        this.load.image('block', 'assets/block.png');
     }
 
     function create() {
@@ -46,9 +46,9 @@ window.onload = function() {
     // Monkey Mart Game Scene
     var monkeyMart = {
         preload: function () {
-            this.load.image('monkey', 'assets/images/monkey.png');
-            this.load.image('item', 'assets/images/item.png');
-            this.load.image('background', 'assets/images/background.png');
+            this.load.image('monkey', 'assets/monkey.png');
+            this.load.image('item', 'assets/item.png');
+            this.load.image('background', 'assets/background.png');
         },
 
         create: function () {
@@ -89,7 +89,7 @@ window.onload = function() {
     // Block Blast Game Scene
     var blockBlast = {
         preload: function () {
-            this.load.image('block', 'assets/images/block.png');
+            this.load.image('block', 'assets/block.png');
         },
 
         create: function () {
@@ -107,27 +107,48 @@ window.onload = function() {
             });
 
             // Create score text
-            scoreText = this.add.text(16, 16, 'Score: 0', { fontSize: '32px', fill: '#000' });
+            scoreText = this.add.text(16, 16, 'Score: 0', { fontSize: '32px', fill: '#fff' });
+
+            // Create player sprite (monkey)
+            player = this.physics.add.sprite(400, 500, 'monkey');
+            player.setCollideWorldBounds(true);
+
+            // Set up keyboard input for movement
+            cursors = this.input.keyboard.createCursorKeys();
         },
 
-        update: function () {}
+        update: function () {
+            // Handle player movement using arrow keys
+            if (cursors.left.isDown) {
+                player.setVelocityX(-160);
+            } else if (cursors.right.isDown) {
+                player.setVelocityX(160);
+            } else {
+                player.setVelocityX(0);
+            }
+
+            if (cursors.up.isDown) {
+                player.setVelocityY(-160);
+            } else if (cursors.down.isDown) {
+                player.setVelocityY(160);
+            } else {
+                player.setVelocityY(0);
+            }
+        }
     };
 
-    // Collect item function for Monkey Mart
+    // Function to collect the item in Monkey Mart game scene
     function collectItem(player, item) {
-        score += 1; // Increment score
-        item.setPosition(Phaser.Math.Between(50, 750), Phaser.Math.Between(50, 550)); // Move the item to a new position
-        console.log("Item collected! Total: " + score);
+        // Destroy the collected item
+        item.setPosition(Phaser.Math.Between(50, 750), Phaser.Math.Between(50, 550)); // Relocate item randomly
+        score += 10; // Increase the score by 10
+        scoreText.setText('Score: ' + score); // Update the score display
     }
 
-    // Destroy block function for Block Blast
-    function destroyBlock(block) {
-        block.setAlpha(0); // Make the block disappear
-        score += 1; // Increment score
-        scoreText.setText('Score: ' + score); // Update the score text
+    // Function to destroy the block in Block Blast game scene
+    function destroyBlock(pointer, block) {
+        block.destroy(); // Remove the block
+        score += 10; // Increase the score by 10
+        scoreText.setText('Score: ' + score); // Update the score display
     }
-
-    // Add scenes to the Phaser game
-    game.scene.add('monkeyMart', monkeyMart);
-    game.scene.add('blockBlast', blockBlast);
 };
