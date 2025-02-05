@@ -1,46 +1,32 @@
-window.onload = function() {
-    // Game configuration using Phaser.js
-    var gameConfig = {
-        type: Phaser.AUTO,
-        width: 800,
-        height: 600,
-        scene: [mainMenuScene, monkeyMart, blockBlast] // Add all the scenes here
-    };
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monkey Mart and Block Blast</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="game-container">
+        <h1>Choose a Game</h1>
+        <div class="game-buttons">
+            <button id="monkey-mart-btn">Monkey Mart</button>
+            <button id="block-blast-btn">Block Blast</button>
+        </div>
+    </div>
 
-    // Create the Phaser game instance
-    var game = new Phaser.Game(gameConfig);
-};
+    <div id="monkey-mart-game" class="game-scene" style="display: none;">
+        <!-- Add your game content for Monkey Mart here -->
+        <h2>Monkey Mart Game</h2>
+        <div id="gameCanvasMonkeyMart"></div>
+    </div>
 
-// Main Menu Scene (Here we initialize buttons and load the initial screen)
-var mainMenuScene = {
-    preload: function() {
-        // Load background for the menu screen
-        this.load.image('background', 'https://via.placeholder.com/800x600/87CEEB/FFFFFF?text=Background');
-    },
+    <div id="block-blast-game" class="game-scene" style="display: none;">
+        <!-- Add your game content for Block Blast here -->
+        <h2>Block Blast Game</h2>
+        <div id="gameCanvasBlockBlast"></div>
+    </div>
 
-    create: function() {
-        // Add the background image for the main menu
-        this.add.image(400, 300, 'background');
-
-        // Create buttons for Monkey Mart and Block Blast
-        var monkeyMartBtn = this.add.text(300, 250, 'Monkey Mart', { fontSize: '32px', fill: '#fff' });
-        var blockBlastBtn = this.add.text(300, 350, 'Block Blast', { fontSize: '32px', fill: '#fff' });
-
-        // Make buttons interactive
-        monkeyMartBtn.setInteractive();
-        blockBlastBtn.setInteractive();
-
-        // Set up button events
-        monkeyMartBtn.on('pointerdown', function() {
-            this.scene.start('monkeyMart');
-        }, this);
-
-        blockBlastBtn.on('pointerdown', function() {
-            this.scene.start('blockBlast');
-        }, this);
-    },
-
-    update: function() {
-        // Nothing to update for the main menu scene
-    }
-};
+    <script src="mainMenu.js"></script>
+</body>
+</html>
