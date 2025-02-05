@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monkey Mart</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f8ff;
+        }
+        #game-container {
+            position: relative;
+            width: 800px;
+            height: 600px;
+            margin: 0 auto;
+            background-color: #cce7ff;
+        }
+        .monkey, .item {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+        }
+        .monkey {
+            background-color: brown;
+            top: 270px;
+            left: 375px;
+        }
+        .item {
+            background-color: green;
+            top: 100px;
+            left: 100px;
+        }
+        .item-collected {
+            background-color: yellow;
+        }
+        #info {
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="game-container">
+    <div id="monkey" class="monkey"></div>
+    <div id="item" class="item"></div>
+</div>
+
+<div id="info">
+    <p>Use Arrow keys to move the monkey. Collect the item by walking over it!</p>
+</div>
+
+<script>
+    const monkey = document.getElementById('monkey');
+    const item = document.getElementById('item');
+    let itemCollected = false;
+
+    // Move the monkey with arrow keys
+    document.addEventListener('keydown', function(e) {
+        const step = 10;
+        const monkeyPos = monkey.getBoundingClientRect();
+
+        switch (e.key) {
+            case 'ArrowUp':
+                if (monkeyPos.top > 0) monkey.style.top = `${monkeyPos.top - step}px`;
+                break;
+            case 'ArrowDown':
+                if (monkeyPos.bottom < window.innerHeight) monkey.style.top = `${monkeyPos.top + step}px`;
+                break;
+            case 'ArrowLeft':
+                if (monkeyPos.left > 0) monkey.style.left = `${monkeyPos.left - step}px`;
+                break;
+            case 'ArrowRight':
+                if (monkeyPos.right < window.innerWidth) monkey.style.left = `${monkeyPos.left + step}px`;
+                break;
+        }
+        
+        checkItemCollision();
+    });
+
+    // Check if the monkey collides with the item
+    function checkItemCollision() {
+        const monkeyPos = monkey.getBoundingClientRect();
+        const itemPos = item.getBoundingClientRect();
+
+        if (!itemCollected && monkeyPos.left < itemPos.right &&
+            monkeyPos.right > itemPos.left &&
+            monkeyPos.top < itemPos.bottom &&
+            monkeyPos.bottom > itemPos.top) {
+            itemCollected = true;
+            item.classList.add('item-collected');
+            document.getElementById('info').innerHTML = "<p>Item Collected! Well done!</p>";
+        }
+    }
+</script>
+
+</body>
+</html>
