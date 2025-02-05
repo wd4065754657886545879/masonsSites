@@ -23,11 +23,11 @@ window.onload = function() {
     var cursors;
 
     function preload() {
-        // Load images using the PNG file URLs
-        this.load.image('monkey', 'assets/monkey.png');
-        this.load.image('item', 'assets/item.png');
-        this.load.image('background', 'assets/background.png');
-        this.load.image('block', 'assets/block.png');
+        // Load images using the placeholder URLs
+        this.load.image('monkey', 'https://via.placeholder.com/32/FF5733/FFFFFF?text=Monkey');
+        this.load.image('item', 'https://via.placeholder.com/16/FFD700/FFFFFF?text=Item');
+        this.load.image('background', 'https://via.placeholder.com/800x600/87CEEB/FFFFFF?text=Background');
+        this.load.image('block', 'https://via.placeholder.com/32/32C8C8/FFFFFF?text=Block');
     }
 
     function create() {
@@ -46,9 +46,9 @@ window.onload = function() {
     // Monkey Mart Game Scene
     var monkeyMart = {
         preload: function () {
-            this.load.image('monkey', 'assets/monkey.png');
-            this.load.image('item', 'assets/item.png');
-            this.load.image('background', 'assets/background.png');
+            this.load.image('monkey', 'https://via.placeholder.com/32/FF5733/FFFFFF?text=Monkey');
+            this.load.image('item', 'https://via.placeholder.com/16/FFD700/FFFFFF?text=Item');
+            this.load.image('background', 'https://via.placeholder.com/800x600/87CEEB/FFFFFF?text=Background');
         },
 
         create: function () {
@@ -89,7 +89,7 @@ window.onload = function() {
     // Block Blast Game Scene
     var blockBlast = {
         preload: function () {
-            this.load.image('block', 'assets/block.png');
+            this.load.image('block', 'https://via.placeholder.com/32/32C8C8/FFFFFF?text=Block');
         },
 
         create: function () {
