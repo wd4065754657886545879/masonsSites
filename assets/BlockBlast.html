@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Block Blast</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f8f8;
+        }
+        #game-container {
+            position: relative;
+            width: 800px;
+            height: 600px;
+            margin: 0 auto;
+            background-color: #ddd;
+            overflow: hidden;
+        }
+        .block {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background-color: #3498db;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<div id="game-container">
+    <!-- Blocks will be generated here -->
+</div>
+
+<script>
+    // Create blocks in random positions
+    const gameContainer = document.getElementById('game-container');
+    
+    for (let i = 0; i < 10; i++) {
+        const block = document.createElement('div');
+        block.classList.add('block');
+        
+        // Randomize position
+        block.style.top = `${Math.random() * (gameContainer.clientHeight - 50)}px`;
+        block.style.left = `${Math.random() * (gameContainer.clientWidth - 50)}px`;
+        
+        // Add click event to remove block
+        block.addEventListener('click', function() {
+            block.remove(); // Remove block when clicked
+        });
+        
+        gameContainer.appendChild(block);
+    }
+</script>
+
+</body>
+</html>
