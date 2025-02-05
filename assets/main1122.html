@@ -3,48 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Game Selection</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f8ff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-        #main-container {
-            text-align: center;
-        }
-        h1 {
-            font-size: 3em;
-            margin-bottom: 20px;
-        }
-        .game-button {
-            display: inline-block;
-            padding: 20px 40px;
-            margin: 20px;
-            font-size: 1.5em;
-            background-color: #3498db;
-            color: white;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            text-decoration: none;
-        }
-        .game-button:hover {
-            background-color: #2980b9;
-        }
-    </style>
+    <title>Monkey Mart and Block Blast</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div id="game-container">
+        <h1>Choose a Game</h1>
+        <div class="game-buttons">
+            <button id="monkey-mart-btn">Monkey Mart</button>
+            <button id="block-blast-btn">Block Blast</button>
+        </div>
+    </div>
 
-<div id="main-container">
-    <h1>Choose a Game</h1>
-    <a href="monkeymart.html" class="game-button">Monkey Mart</a>
-    <a href="blockblast.html" class="game-button">Block Blast</a>
-</div>
-
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
+    <script src="game.js"></script>
 </body>
 </html>
