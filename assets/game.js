@@ -29,17 +29,16 @@ function preload() {
 }
 
 function create() {
-    // Adding event listeners for the buttons
+    // Add event listeners for the buttons
     document.getElementById("monkey-mart-btn").addEventListener("click", function() {
-        game.scene.start("monkeyMart");
+        game.scene.start("monkeyMart"); // Start the Monkey Mart scene
+        document.getElementById("game-container").style.display = 'none'; // Hide the main menu
     });
 
     document.getElementById("block-blast-btn").addEventListener("click", function() {
-        game.scene.start("blockBlast");
+        game.scene.start("blockBlast"); // Start the Block Blast scene
+        document.getElementById("game-container").style.display = 'none'; // Hide the main menu
     });
-    
-    // You can remove the buttons after starting the game
-    document.getElementById("game-container").style.display = 'none';
 }
 
 // Monkey Mart Game Scene
@@ -51,18 +50,22 @@ var monkeyMart = {
     },
 
     create: function () {
-        this.add.image(400, 300, 'background');
+        this.add.image(400, 300, 'background'); // Add the background image
 
+        // Create the player sprite (monkey)
         player = this.physics.add.sprite(400, 300, 'monkey');
-        player.setCollideWorldBounds(true);
+        player.setCollideWorldBounds(true); // Prevent the player from moving outside the world
 
+        // Create the item sprite to be collected
         item = this.physics.add.sprite(Phaser.Math.Between(50, 750), Phaser.Math.Between(50, 550), 'item');
-        this.physics.add.overlap(player, item, collectItem, null, this);
+        this.physics.add.overlap(player, item, collectItem, null, this); // Detect overlap between player and item
 
+        // Set up keyboard input for movement
         cursors = this.input.keyboard.createCursorKeys();
     },
 
     update: function () {
+        // Handle player movement using arrow keys
         if (cursors.left.isDown) {
             player.setVelocityX(-160);
         } else if (cursors.right.isDown) {
@@ -88,38 +91,40 @@ var blockBlast = {
     },
 
     create: function () {
+        // Create a group of blocks
         blocks = this.physics.add.group({
             key: 'block',
             repeat: 10,
             setXY: { x: 100, y: 100, stepX: 70, stepY: 0 }
         });
 
+        // Add interactivity to blocks
         blocks.children.iterate(function(block) {
             block.setInteractive();
             block.on('pointerdown', destroyBlock, this);
         });
 
+        // Create score text
         scoreText = this.add.text(16, 16, 'Score: 0', { fontSize: '32px', fill: '#000' });
     },
 
     update: function () {}
-
 };
 
 // Collect item function for Monkey Mart
 function collectItem(player, item) {
-    score += 1;
-    item.setPosition(Phaser.Math.Between(50, 750), Phaser.Math.Between(50, 550));
+    score += 1; // Increment score
+    item.setPosition(Phaser.Math.Between(50, 750), Phaser.Math.Between(50, 550)); // Move the item to a new position
     console.log("Item collected! Total: " + score);
 }
 
 // Destroy block function for Block Blast
 function destroyBlock(block) {
     block.setAlpha(0); // Make the block disappear
-    score += 1;
-    scoreText.setText('Score: ' + score);
+    score += 1; // Increment score
+    scoreText.setText('Score: ' + score); // Update the score text
 }
 
-// Add scenes to game
+// Add scenes to the Phaser game
 game.scene.add('monkeyMart', monkeyMart);
 game.scene.add('blockBlast', blockBlast);
