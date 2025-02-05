@@ -1,20 +1,28 @@
-var monkeyMart = {
+var blockBlast = {
     preload: function () {
-        this.load.image('monkey', 'https://via.placeholder.com/32/FF5733/FFFFFF?text=Monkey');
-        this.load.image('item', 'https://via.placeholder.com/16/FFD700/FFFFFF?text=Item');
-        this.load.image('background', 'https://via.placeholder.com/800x600/87CEEB/FFFFFF?text=Background');
+        this.load.image('block', 'https://via.placeholder.com/32/32C8C8/FFFFFF?text=Block');
     },
 
     create: function () {
-        this.add.image(400, 300, 'background'); // Add the background image
+        // Create a group of blocks
+        blocks = this.physics.add.group({
+            key: 'block',
+            repeat: 10,
+            setXY: { x: 100, y: 100, stepX: 70, stepY: 0 }
+        });
 
-        // Create the player sprite (monkey)
-        player = this.physics.add.sprite(400, 300, 'monkey');
-        player.setCollideWorldBounds(true); // Prevent the player from moving outside the world
+        // Add interactivity to blocks
+        blocks.children.iterate(function(block) {
+            block.setInteractive();
+            block.on('pointerdown', destroyBlock, this);
+        });
 
-        // Create the item sprite to be collected
-        item = this.physics.add.sprite(Phaser.Math.Between(50, 750), Phaser.Math.Between(50, 550), 'item');
-        this.physics.add.overlap(player, item, collectItem, null, this); // Detect overlap between player and item
+        // Create score text
+        scoreText = this.add.text(16, 16, 'Score: 0', { fontSize: '32px', fill: '#fff' });
+
+        // Create player sprite (monkey)
+        player = this.physics.add.sprite(400, 500, 'monkey');
+        player.setCollideWorldBounds(true);
 
         // Set up keyboard input for movement
         cursors = this.input.keyboard.createCursorKeys();
@@ -40,10 +48,9 @@ var monkeyMart = {
     }
 };
 
-// Function to collect the item in Monkey Mart game scene
-function collectItem(player, item) {
-    // Destroy the collected item
-    item.setPosition(Phaser.Math.Between(50, 750), Phaser.Math.Between(50, 550)); // Relocate item randomly
+// Function to destroy the block in Block Blast game scene
+function destroyBlock(pointer, block) {
+    block.destroy(); // Remove the block
     score += 10; // Increase the score by 10
     scoreText.setText('Score: ' + score); // Update the score display
 }
