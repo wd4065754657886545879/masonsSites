@@ -1,4 +1,3 @@
-// Monkey Mart Game Scene
 var monkeyMart = {
     preload: function () {
         this.load.image('monkey', 'https://via.placeholder.com/32/FF5733/FFFFFF?text=Monkey');
