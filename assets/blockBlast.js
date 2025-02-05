@@ -1,57 +1,179 @@
-// Block Blast Game Scene
-var blockBlast = {
-    preload: function () {
-        this.load.image('block', 'https://via.placeholder.com/32/32C8C8/FFFFFF?text=Block');
-    },
+// Block Blast Game
+document.getElementById("startBtn").addEventListener('click', startGame);
 
-    create: function () {
-        // Create a group of blocks
-        blocks = this.physics.add.group({
-            key: 'block',
-            repeat: 10,
-            setXY: { x: 100, y: 100, stepX: 70, stepY: 0 }
-        });
+// The game grid
+const gridSize = 10; // 10x10 grid
+const grid = [];
+let gameInterval;
 
-        // Add interactivity to blocks
-        blocks.children.iterate(function(block) {
-            block.setInteractive();
-            block.on('pointerdown', destroyBlock, this);
-        });
+// Start the game
+function startGame() {
+    resetGame();
+    generateRandomShapes();
+    gameInterval = setInterval(updateGame, 500);
+}
 
-        // Create score text
-        scoreText = this.add.text(16, 16, 'Score: 0', { fontSize: '32px', fill: '#fff' });
-
-        // Create player sprite (monkey)
-        player = this.physics.add.sprite(400, 500, 'monkey');
-        player.setCollideWorldBounds(true);
-
-        // Set up keyboard input for movement
-        cursors = this.input.keyboard.createCursorKeys();
-    },
-
-    update: function () {
-        // Handle player movement using arrow keys
-        if (cursors.left.isDown) {
-            player.setVelocityX(-160);
-        } else if (cursors.right.isDown) {
-            player.setVelocityX(160);
-        } else {
-            player.setVelocityX(0);
-        }
-
-        if (cursors.up.isDown) {
-            player.setVelocityY(-160);
-        } else if (cursors.down.isDown) {
-            player.setVelocityY(160);
-        } else {
-            player.setVelocityY(0);
+// Reset the game grid
+function resetGame() {
+    grid.length = 0; // Clear the grid
+    for (let row = 0; row < gridSize; row++) {
+        grid[row] = [];
+        for (let col = 0; col < gridSize; col++) {
+            grid[row][col] = null;
         }
     }
-};
 
-// Function to destroy the block in Block Blast game scene
-function destroyBlock(pointer, block) {
-    block.destroy(); // Remove the block
-    score += 10; // Increase the score by 10
-    scoreText.setText('Score: ' + score); // Update the score display
+    const canvas = document.getElementById("gameCanvasBlockBlast");
+    canvas.innerHTML = ''; // Clear previous grid
+    document.getElementById("game-container").style.border = ''; // Reset border color
+}
+
+// Generate random shapes at random positions
+function generateRandomShapes() {
+    // Check for game over before placing new shapes
+    if (grid[0].some(cell => cell !== null)) {
+        gameOver(); // Game over if top row is filled
+        return;
+    }
+
+    const canvas = document.getElementById("gameCanvasBlockBlast");
+
+    for (let row = 0; row < gridSize; row++) {
+        for (let col = 0; col < gridSize; col++) {
+            if (Math.random() < 0.2) { // 20% chance to add a shape
+                const shape = getRandomShape();
+                grid[row][col] = shape;
+
+                const shapeDiv = document.createElement("div");
+                shapeDiv.classList.add("shape", shape);
+                shapeDiv.style.gridRowStart = row + 1;
+                shapeDiv.style.gridColumnStart = col + 1;
+                shapeDiv.dataset.row = row;
+                shapeDiv.dataset.col = col;
+
+                shapeDiv.addEventListener("click", () => onShapeClick(row, col));
+
+                canvas.appendChild(shapeDiv);
+            }
+        }
+    }
+}
+
+// Get a random shape
+function getRandomShape() {
+    return shapes[Math.floor(Math.random() * shapes.length)];
+}
+
+// Handle a click on a shape
+function onShapeClick(row, col) {
+    const shape = grid[row][col];
+
+    if (shape) {
+        // Remove the shape and update the grid
+        grid[row][col] = null;
+        removeShapeFromGrid(row, col);
+        checkForMatches();
+    }
+}
+
+// Remove shape from the grid (UI)
+function removeShapeFromGrid(row, col) {
+    const canvas = document.getElementById("gameCanvasBlockBlast");
+    const shapeDiv = canvas.querySelector(`div[data-row='${row}'][data-col='${col}']`);
+    if (shapeDiv) {
+        shapeDiv.remove();
+    }
+}
+
+// Check for any completed lines (rows or columns)
+function checkForMatches() {
+    for (let row = 0; row < gridSize; row++) {
+        if (checkRow(row)) {
+            clearRow(row);
+        }
+    }
+
+    for (let col = 0; col < gridSize; col++) {
+        if (checkColumn(col)) {
+            clearColumn(col);
+        }
+    }
+
+    // Apply gravity after clearing lines
+    applyGravity();
+}
+
+// Check if a row is filled with the same shape
+function checkRow(row) {
+    const firstShape = grid[row][0];
+    if (!firstShape) return false;
+
+    for (let col = 1; col < gridSize; col++) {
+        if (grid[row][col] !== firstShape) {
+            return false;
+        }
+    }
+    return true;
+}
+
+// Clear a filled row and update the grid
+function clearRow(row) {
+    for (let col = 0; col < gridSize; col++) {
+        grid[row][col] = null;
+        removeShapeFromGrid(row, col);
+    }
+}
+
+// Check if a column is filled with the same shape
+function checkColumn(col) {
+    const firstShape = grid[0][col];
+    if (!firstShape) return false;
+
+    for (let row = 1; row < gridSize; row++) {
+        if (grid[row][col] !== firstShape) {
+            return false;
+        }
+    }
+    return true;
+}
+
+// Clear a filled column and update the grid
+function clearColumn(col) {
+    for (let row = 0; row < gridSize; row++) {
+        grid[row][col] = null;
+        removeShapeFromGrid(row, col);
+    }
+}
+
+// Apply gravity (shapes fall down)
+function applyGravity() {
+    for (let col = 0; col < gridSize; col++) {
+        let emptySpaces = 0;
+        for (let row = gridSize - 1; row >= 0; row--) {
+            if (grid[row][col] === null) {
+                emptySpaces++;
+            } else if (emptySpaces > 0) {
+                grid[row + emptySpaces][col] = grid[row][col];
+                grid[row][col] = null;
+
+                // Move the shape down in the UI
+                const shapeDiv = document.querySelector(`div[data-row='${row}'][data-col='${col}']`);
+                if (shapeDiv) {
+                    shapeDiv.style.gridRowStart = row + emptySpaces + 1;
+                }
+            }
+        }
+    }
+}
+
+// Game Over function: Display Game Over and make border gray
+function gameOver() {
+    clearInterval(gameInterval); // Stop the game loop
+    document.getElementById("game-container").style.border = '5px solid gray'; // Gray border
+    alert("Game Over! No space for new blocks.");
+}
+
+// Update game every 500ms
+function updateGame() {
+    // Future game logic for adding new blocks or special events can go here.
 }
