@@ -33,13 +33,13 @@ window.onload = function() {
     function create() {
         // Add event listeners for the buttons when DOM is ready
         document.getElementById("monkey-mart-btn").addEventListener("click", function() {
-            game.scene.start("monkeyMart"); // Start the Monkey Mart scene
-            document.getElementById("game-container").style.display = 'none'; // Hide the main menu
+            game.scene.start("monkeyMart"); // Start the Monkey Mart scene immediately
+            document.getElementById("game-container").style.display = 'none'; // Hide the main menu instantly
         });
 
         document.getElementById("block-blast-btn").addEventListener("click", function() {
-            game.scene.start("blockBlast"); // Start the Block Blast scene
-            document.getElementById("game-container").style.display = 'none'; // Hide the main menu
+            game.scene.start("blockBlast"); // Start the Block Blast scene immediately
+            document.getElementById("game-container").style.display = 'none'; // Hide the main menu instantly
         });
     }
 
