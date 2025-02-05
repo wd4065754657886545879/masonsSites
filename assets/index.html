@@ -15,12 +15,18 @@
         </div>
     </div>
 
-    <!-- Include Phaser library -->
-    <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
-    
-    <!-- Include the custom game scripts for both games -->
-    <script src="monkeyMart.js"></script>
-    <script src="blockBlast.js"></script>
-    <script src="mainMenu.js"></script> <!-- Main Menu Logic -->
+    <div id="monkey-mart-game" class="game-scene" style="display: none;">
+        <!-- Add your game content for Monkey Mart here -->
+        <h2>Monkey Mart Game</h2>
+        <div id="gameCanvasMonkeyMart"></div>
+    </div>
+
+    <div id="block-blast-game" class="game-scene" style="display: none;">
+        <!-- Add your game content for Block Blast here -->
+        <h2>Block Blast Game</h2>
+        <div id="gameCanvasBlockBlast"></div>
+    </div>
+
+    <script src="mainMenu.js"></script>
 </body>
 </html>
